@@ -4,41 +4,56 @@ const WINNING_CONDITIONS = {
 	rock: 'scissors',
 }
 
-const AVAILABLE_CHOICES = ['rock', 'paper','scissors'];
-const ROUND_OFFSET = 1;
+const AVAILABLE_CHOICES = ['rock', 'paper', 'scissors'];
+const SCORE_TO_WIN = 5;
+
+let humanScore = 0;
+let computerScore = 0;
+let round = 0;
+
+const addHumanScore = () => humanScore++;
+const addComputerScore = () => computerScore++;
+const increaseRound = () => round++;
+
+
 
 function getComputerChoice() {
 	const randomInt = Math.floor(Math.random() * AVAILABLE_CHOICES.length); // return (0,1,2)
 	return AVAILABLE_CHOICES[randomInt];
 }
 
-function getHumanChoice() {
-	const humanChoice = prompt('Type your choice (rock, paper or scissors):');
-
-	while(!AVAILABLE_CHOICES.includes(humanChoice)) {
-		humanChoice = prompt();
-	}
+function getHumanChoice(event) {
+	const humanChoice = event.target.value;
 
 	return humanChoice.toLowerCase();
 }
 
+
+function showGameResult(result) {
+	const resultContainer = document.getElementById('game-result');
+	resultContainer.textContent = result;
+}
+
+
 function showHumanWin(humanChoice, computerChoice) {
-	console.log(`You win! ${humanChoice} beats ${computerChoice}`);
+	showGameResult(`You win! ${humanChoice} beats ${computerChoice}`);
 }
 
 function showComputerWin(computerChoice, humanChoice) {
-	console.log(`You lose! ${computerChoice} beats ${humanChoice}`);
+	showGameResult(`You lose! ${computerChoice} beats ${humanChoice}`);
 }
 
-function playRound(humanChoice, computerChoice, addHumanScore, addComputerScore) {
+function playRound(humanChoice, computerChoice, addHumanScore, addComputerScore, increaseRound) {
 
-	if (WINNING_CONDITIONS[humanChoice] === computerChoice) {		
+	increaseRound();
+
+	if (WINNING_CONDITIONS[humanChoice] === computerChoice) {
 		addHumanScore();
 		showHumanWin(humanChoice, computerChoice);
 		return;
 	}
 
-	if (WINNING_CONDITIONS[computerChoice] === humanChoice){
+	if (WINNING_CONDITIONS[computerChoice] === humanChoice) {
 		addComputerScore();
 		showComputerWin(computerChoice, humanChoice);
 		return;
@@ -46,34 +61,74 @@ function playRound(humanChoice, computerChoice, addHumanScore, addComputerScore)
 
 
 	if (computerChoice === humanChoice) {
-		console.log('This round was a draw!');
+		showGameResult('This round was a draw!');
 		return;
 	}
 
 }
 
-function playGame() {
-	let humanScore = 0;
-	let computerScore = 0;
-	let round;
+function showScoreBoard(round, humanScore, computerScore) {
+	const humanScoreElement = document.getElementById('human-score-value');
+	const computerScoreElement = document.getElementById('computer-score-value');
+	const roundElement = document.getElementById('round-value');
 
-	for (round = 0; round < 5; round++) {
+	roundElement.textContent = round;
+	humanScoreElement.textContent = humanScore;
+	computerScoreElement.textContent = computerScore;
 
-		const humanChoice = getHumanChoice();
-		const computerChoice = getComputerChoice();
-
-
-		playRound(
-			humanChoice, 
-			computerChoice, 
-			() => humanScore++, 
-			() => computerScore++
-		);
-
-		console.log(`Round:${round + ROUND_OFFSET}`);
-		console.log(`Human Score:${humanScore}`);
-		console.log(`Computer Score:${computerScore}`);
-	}
 }
 
-playGame();
+function showWinner(humanScore, computerScore, stopTheGame) {
+
+	if (humanScore === SCORE_TO_WIN) {
+		showGameResult('Human was the winner!');
+		stopTheGame();
+		return;
+	}
+
+	if (computerScore === SCORE_TO_WIN) {
+		showGameResult('Computer was the winner!');
+		stopTheGame();
+		return;
+	}
+
+}
+
+
+function removeEventListener() {
+	const containerOptions = document.getElementById('container-options');
+
+	containerOptions.removeEventListener('click', playGame);
+}
+
+
+
+function createGame() {
+
+	const containerOptions = document.getElementById('container-options');
+	containerOptions.addEventListener('click', playGame)
+
+}
+
+
+function playGame(event) {
+
+
+	const humanChoice = getHumanChoice(event);
+	const computerChoice = getComputerChoice();
+
+	playRound(
+		humanChoice,
+		computerChoice,
+		addHumanScore,
+		addComputerScore,
+		increaseRound,
+	);
+
+	showScoreBoard(round, humanScore, computerScore);
+	showWinner(humanScore, computerScore, removeEventListener);
+
+}
+
+
+createGame();
