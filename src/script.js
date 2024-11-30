@@ -94,6 +94,37 @@ function showWinner(humanScore, computerScore, stopTheGame) {
 
 }
 
+function removeRestartButton() {
+	const restartButton = document.getElementById('restart-btn');
+	const containerOptions = document.getElementById('container-options');
+
+	containerOptions.removeChild(restartButton);
+}
+
+function restartGame() {
+	humanScore = 0;
+	computerScore = 0;
+	round = 0;
+
+	showGameResult("");
+	createGame();
+	removeRestartButton();
+}
+
+
+
+function addRestartButton() {
+	const containerOptions = document.getElementById('container-options');
+
+	const restartButton = document.createElement('button');
+	restartButton.className = 'btn-option';
+	restartButton.innerHTML = "Restart";
+	restartButton.setAttribute('id','restart-btn');
+	restartButton.addEventListener('click', restartGame)
+
+	containerOptions.appendChild(restartButton);
+
+}
 
 function removeEventListener() {
 	const containerOptions = document.getElementById('container-options');
@@ -101,7 +132,11 @@ function removeEventListener() {
 	containerOptions.removeEventListener('click', playGame);
 }
 
-
+function stopTheGame() {
+	removeEventListener();
+	addRestartButton();
+	
+}
 
 function createGame() {
 
@@ -126,7 +161,7 @@ function playGame(event) {
 	);
 
 	showScoreBoard(round, humanScore, computerScore);
-	showWinner(humanScore, computerScore, removeEventListener);
+	showWinner(humanScore, computerScore, stopTheGame);
 
 }
 
