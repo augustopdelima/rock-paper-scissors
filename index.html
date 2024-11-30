@@ -5,34 +5,49 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Rock Paper Scissors</title>
+   <link rel="stylesheet" href="/styles/reset.css">
+   <link rel="stylesheet" href="/styles/styles.css">
 </head>
 
 <body>
    <header>
-      <h1>Rock, Paper and Scissors</h1>
+      <h1 class="title">Rock, Paper and Scissors</h1>
    </header>
-   <main>
-      <h2>Select your option</h2>
-      <section id="container-options">
-         <button value="rock" class="btn-option">Rock</button>
-         <button value="paper" class="btn-option">Paper</button>
-         <button value="scissors" class="btn-option">Scissors</button>
-      </section>
-      <div id="game-result"></div>
 
-      <p id="round-display">
-         Round:<span id="round-value">0</span>
-      </p>
+   <main class="container">
+      <div class="content">
+         <h2 class="subtitle">Select your option</h2>
 
-      <p id="human-score-display">
-         Human Score:<span id="human-score-value">0</span>
-      </p>
+         <div id="container-options">
+            <button value="rock" class="btn-option">Rock</button>
+            <button value="paper" class="btn-option">Paper</button>
+            <button value="scissors" class="btn-option">Scissors</button>
+         </div>
 
-      <p id="computer-score-display">
-         Computer Score:<span id="computer-score-value">0</span>
-      </p>
+         <section class="score-board">
+            <h3 class="subtitle">Score</h3>
+
+            <p id="round-display">
+               Round:<span id="round-value">0</span>
+            </p>
+
+            <p id="human-score-display">
+               Human Score:<span id="human-score-value">0</span>
+            </p>
+
+            <p id="computer-score-display">
+               Computer Score:<span id="computer-score-value">0</span>
+            </p>
+
+            <div id="game-result"></div>
+         </section>
+      </div>
 
    </main>
+
+
+
+
    <script src="./src/script.js"></script>
 </body>
 
